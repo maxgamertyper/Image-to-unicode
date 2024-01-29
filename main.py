@@ -1,10 +1,11 @@
 from PIL import Image
 
 invert="Both"
-
 image_file_path="file.file"
-inverted_text_file="inverted.txt"
+inverted_text_file="invert.txt"
 normal_text_file="normal.txt"
+
+
 
 im = Image.open(image_file_path, 'r')
 rgb_im = im.convert('RGB')
