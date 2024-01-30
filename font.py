@@ -1,7 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import math
 
-all_extended_ascii_characters = [chr(i) for i in range(0x0021, 0x024F)] + [chr(i) for i in range(0x1E00, 0x1EFF)]
+all_unicode_chars=[chr(code) for code in range(0, 1114112)]
 dicta = {}
 
 def round_to_number(number1, number2):
@@ -34,13 +34,13 @@ def generate_image(letter, font_size=20):
 
 def assemble_dict():
 
-  for i in all_extended_ascii_characters:
+  for i in all_unicode_chars:
       if i.isprintable():
           dicta[i] = generate_image(i, font_size=16)
-  
+
   # Sort the dictionary based on values in descending order
   sorted_dicta = dict(sorted(dicta.items(), key=lambda item: item[1], reverse=True))
-  
+
   # Create a new dictionary with the first occurrence of symbols with equal values
   final_dicta = {}
   used_values = set()  # Keep track of used values
@@ -48,21 +48,20 @@ def assemble_dict():
       if value not in used_values:
           final_dicta[value] = symbol
           used_values.add(value)
-  
-  rgb_dict = {i: {"difference":256,"symbol":""} for i in range(255, 0, -2)}
+
+  rgb_dict = {i: {"difference":256,"symbol":""} for i in range(256, 0, -2)}
   rgb_dict[0]={"difference":256,"symbol":""}
-  
+
   for value,symbol in final_dicta.items():
       value=value*255
       for key in rgb_dict.keys():
           if rgb_dict[key]["difference"]>abs(key-value):
               rgb_dict[key]["difference"]=abs(key-value)
               rgb_dict[key]["symbol"]=symbol
-  
+
   for key in rgb_dict.keys():
       rgb_dict[key]=rgb_dict[key]["symbol"]
-  
+
   return rgb_dict
 
 print(assemble_dict())
-#add more unicode characters for more accuracy/image quality
